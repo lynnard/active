@@ -5,7 +5,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
-{-# LANGUAGE TemplateHaskell            #-}
+-- {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE TypeSynonymInstances       #-}
 {-# LANGUAGE UndecidableInstances       #-}
@@ -169,7 +169,11 @@ import           Linear.Affine
 newtype Time n = Time { unTime :: n }
   deriving (Eq, Ord, Show, Read, Enum, Num, Fractional, Real, RealFrac, Functor)
 
-makeWrapped ''Time
+-- makeWrapped ''Time
+instance Time n_amCG ~ t_amCF => Rewrapped (Time n_ah3a) t_amCF
+instance Wrapped (Time n_ah3a) where
+  type Unwrapped (Time n_ah3a) = n_ah3a
+  _Wrapped' = iso (\ (Time x_amCE) -> x_amCE) Time
 
 -- | A convenient wrapper function to convert a numeric value into a time.
 toTime :: n -> Time n
@@ -195,7 +199,12 @@ instance Affine Time where
 newtype Duration n = Duration n
   deriving (Eq, Ord, Show, Read, Enum, Num, Fractional, Real, RealFrac, Functor)
 
-makeWrapped ''Duration
+-- makeWrapped ''Duration
+instance Duration n_aoFt ~ t_aoFs =>
+         Rewrapped (Duration n_amCL) t_aoFs
+instance Wrapped (Duration n_amCL) where
+  type Unwrapped (Duration n_amCL) = n_amCL
+  _Wrapped' = iso (\ (Duration x_aoFr) -> x_aoFr) Duration
 
 -- | A convenient wrapper function to convert a numeric value into a duration.
 toDuration :: n -> Duration n
@@ -328,8 +337,17 @@ shiftDynamic sh =
 newtype Active a = Active (MaybeApply Dynamic a)
   deriving (Functor, Apply, Applicative)
 
-makeWrapped ''Active
-makeWrapped ''MaybeApply
+-- makeWrapped ''Active
+instance Active a_aqbg ~ t_aqbf => Rewrapped (Active a_aoZk) t_aqbf
+instance Wrapped (Active a_aoZk) where
+  type Unwrapped (Active a_aoZk) = MaybeApply Dynamic a_aoZk
+  _Wrapped' = iso (\ (Active x_aqbe) -> x_aqbe) Active
+-- makeWrapped ''MaybeApply
+instance MaybeApply f_aqcy a_aqcz ~ t_aqcx =>
+         Rewrapped (MaybeApply f_ap0M a_ap0N) t_aqcx
+instance Wrapped (MaybeApply f_ap0M a_ap0N) where
+  type Unwrapped (MaybeApply f_ap0M a_ap0N) = Either (f_ap0M a_ap0N) a_ap0N
+  _Wrapped' = iso (\ (MaybeApply x_aqcw) -> x_aqcw) MaybeApply
 
 active :: Iso' (Active a) (Either (Dynamic a) a)
 active = _Wrapped . _Wrapped
